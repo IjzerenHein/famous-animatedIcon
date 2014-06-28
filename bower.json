@@ -1,0 +1,30 @@
+{
+  "name": "famous-animatedicon",
+  "version": "0.0.1",
+  "homepage": "https://github.com/IjzerenHein/famous-animatedicon",
+  "authors": [
+    "Hein Rutjes <hrutjes@gmail.com>"
+  ],
+  "description": "Animated icon for famo.us",
+  "keywords": [
+    "famo.us",
+    "famous",
+    "icon",
+    "animated",
+    "animated-icon"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "tests",
+    "examples",
+    "docs",
+    "Gruntfile.js"
+  ],
+  "dependencies": {
+    "requirejs": "~2.1.11",
+    "famous": "~0.2.0"
+  }
+}

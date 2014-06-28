@@ -1,0 +1,19 @@
+html {
+  background: #fff;
+}
+
+.backfaceVisibility {
+  -webkit-backface-visibility: visible;
+  backface-visibility: visible;
+}
+
+.back {
+    background-color: #4783eb;
+    border-radius: 5px;
+}
+
+.line {
+    background-color: white;
+    border-radius: 1px;
+    pointer-events: none;
+}
