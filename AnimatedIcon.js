@@ -1,24 +1,8 @@
-/* 
- * Copyright (c) 2014 Gloey Apps
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * 
+/**
+ * This Source Code is licensed under the MIT license. If a copy of the
+ * MIT-license was not distributed with this file, You can obtain one at:
+ * http://opensource.org/licenses/mit-license.html.
+ *
  * @author: Hein Rutjes (IjzerenHein)
  * @license MIT
  * @copyright Gloey Apps, 2014
@@ -27,15 +11,14 @@
 /*jslint browser:true, nomen:true, vars:true, plusplus:true*/
 /*global define*/
 
-define(function (require, exports, module) {
-    'use strict';
+define(function(require, exports, module) {
 
     // import dependencies
     var Surface = require('famous/core/Surface');
-    var Modifier = require('famous/core/Modifier');
     var StateModifier = require('famous/modifiers/StateModifier');
     var View = require('famous/core/View');
     var Transform = require('famous/core/Transform');
+    var Easing = require('famous/transitions/Easing');
 
     /**
      * @enum
@@ -44,7 +27,7 @@ define(function (require, exports, module) {
         HAMBURGER: 0,
         LEFT_ARROW: 1
     };
-    
+
     /**
      * @class
      * @extends View
@@ -52,10 +35,10 @@ define(function (require, exports, module) {
      */
     function AnimatedIcon(options) {
         View.apply(this, arguments);
-                
+
         this._createLines();
         this._createShapes();
-        
+
         this.setShape(Shape.HAMBURGER, {duration: 0});
     }
     AnimatedIcon.prototype = Object.create(View.prototype);
@@ -63,13 +46,13 @@ define(function (require, exports, module) {
     AnimatedIcon.Shape = Shape;
 
     AnimatedIcon.DEFAULT_OPTIONS = {
-        defaultTransition: {duration: 300}
+        defaultTransition: {duration: 300, curve: Easing.inOutQuart}
     };
-    
+
     /**
      * Create line modifiers & surfaces
      */
-    AnimatedIcon.prototype._createLines = function () {
+    AnimatedIcon.prototype._createLines = function() {
         var i;
         this.lines = [];
         for (i = 0; i < 3; i++) {
@@ -84,13 +67,13 @@ define(function (require, exports, module) {
             this.lines.push(modifier);
         }
     };
-    
+
     /**
      * Create shapes
      */
-    AnimatedIcon.prototype._createShapes = function () {
+    AnimatedIcon.prototype._createShapes = function() {
         this.shapes = [];
-        
+
         // Hamburger
         this.shapes.push({
             name: 'hamburger',
@@ -100,7 +83,7 @@ define(function (require, exports, module) {
                 { size: [24, 2], transform: Transform.translate(0, 22, 0) }
             ]
         });
-        
+
         // Left-arrow
         this.shapes.push({
             name: 'left-arrow',
@@ -111,35 +94,39 @@ define(function (require, exports, module) {
             ]
         });
     };
-  
+
     /**
      * Sets the shape
      */
-    AnimatedIcon.prototype.setShape = function (shapeIndex, transition, callback) {
+    AnimatedIcon.prototype.setShape = function(shapeIndex, transition, callback) {
         if (this._shapeIndex === shapeIndex) {
-            if (callback) { callback(); }
+            if (callback) {
+                callback();
+            }
             return;
         }
         this._shapeIndex = shapeIndex;
-        if (!transition) { transition = this.options.defaultTransition; }
-        var i, shape = this.shapes[shapeIndex];
+        transition = transition || this.options.defaultTransition;
+        var i;
+        var shape = this.shapes[shapeIndex];
         for (i = 0; i < shape.lines.length; i++) {
             this.lines[i].halt();
             this.lines[i].setSize(shape.lines[i].size, transition);
             if (i === 0) {
                 this.lines[i].setTransform(shape.lines[i].transform, transition, callback);
-            } else {
+            }
+            else {
                 this.lines[i].setTransform(shape.lines[i].transform, transition);
             }
         }
     };
-    
+
     /**
      * Get the shape
      */
-    AnimatedIcon.prototype.getShape = function (shapeIndex, transition) {
+    AnimatedIcon.prototype.getShape = function(shapeIndex, transition) {
         return this._shapeIndex;
     };
-        
+
     module.exports = AnimatedIcon;
 });
